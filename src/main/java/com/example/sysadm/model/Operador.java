@@ -27,7 +27,6 @@ public class Operador {
 
     @NotNull
     @Size(min = 6, max = 15)
-    @Pattern(regexp = "/^\\S/")
     private String senha;
 
     @NotNull
