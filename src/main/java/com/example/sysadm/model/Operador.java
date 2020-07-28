@@ -15,25 +15,24 @@ public class Operador {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
-    @Size(max = 100)
-    @Pattern(regexp = "^[A-Za-z ]*$")
+    @NotNull(message = "Nome não pode ser nulo")
+    @Size(max = 100, message = "Nome deve ter no máximo 100 caracteres")
+    @Pattern(regexp = "^[A-Za-z ]*$", message = "Nome inválido")
     private String nome;
 
-    @NotNull
-    @Size(max = 15)
-    @Pattern(regexp = "^[A-Za-z-_]*$")
+    @NotNull(message = "Login não pode ser nulo")
+    @Size(max = 15, message = "Login deve ter no máximo 15 caracteres")
+    @Pattern(regexp = "^[A-Za-z-_]*$", message = "Login inválido")
     private String login;
 
-    @NotNull
-    @Size(min = 6, max = 15)
+    @NotNull(message = "Senha não pode ser nula")
+    @Size(min = 6, max = 15, message = "Senha deve ter no mínimo 6 e no máximo 15 caracteres")
     private String senha;
 
-    @NotNull
+    @NotNull(message = "Perfil não pode ser nulo")
     @Enumerated(EnumType.STRING)
     private PerfilEnum perfil;
 
-    @NotNull
     private LocalDate dataCadastro;
 
     public Operador() {

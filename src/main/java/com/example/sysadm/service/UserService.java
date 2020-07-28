@@ -1,5 +1,7 @@
 package com.example.sysadm.service;
 
+import com.example.sysadm.dto.OperadorDTO;
+import com.example.sysadm.interceptor.AuthenticationData;
 import com.example.sysadm.model.Operador;
 import com.example.sysadm.repository.LoginRepository;
 import com.example.sysadm.repository.UserRepository;
@@ -24,19 +26,35 @@ public class UserService {
     }
 
     public Operador cadastrarOperador(Operador operador) {
-        Operador login = repository.findByLogin(operador.getLogin());
-        if (login != null) {
-            return null;
+        if (!operador.getPerfil().toString().equals("ADMINISTRADOR")
+                && AuthenticationData.getLoggedUser().getPerfil().toString().equals("ADMINISTRADOR")) {
+            Operador login = repository.findByLogin(operador.getLogin());
+            if (login != null) {
+                return null;
+            }
+            operador.setDataCadastro(LocalDate.now());
+            return repository.save(operador);
         }
-        operador.setDataCadastro(LocalDate.now());
-        return repository.save(operador);
+        return null;
     }
 
-    public List<Operador> listarOperadores() {
-        Iterable<Operador> all = repository.findAll();
-        List<Operador> operadores = new ArrayList<>();
-        all.forEach(operadores::add);
-        return operadores;
+    public List<OperadorDTO> listarOperadores() {
+        if (AuthenticationData.getLoggedUser().getPerfil().toString().equals("ADMINISTRADOR")) {
+            Iterable<Operador> all = repository.findAll();
+            List<OperadorDTO> operadores = new ArrayList<>();
+            all.forEach(operador -> {
+                OperadorDTO dto = new OperadorDTO();
+                dto.setNome(operador.getNome());
+                dto.setLogin(operador.getLogin());
+                dto.setDataCadastro(operador.getDataCadastro());
+                dto.setPerfil(operador.getPerfil());
+
+                operadores.add(dto);
+            });
+
+            return operadores;
+        }
+        return new ArrayList<>();
     }
 
     public Operador buscarOperadorPorLogin(String login) {

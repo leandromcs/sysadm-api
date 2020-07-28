@@ -25,7 +25,7 @@ public class AutheticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (request.getServletPath().contains("login") || request.getServletPath().contains("cadastrar")) {
+        if (request.getServletPath().contains("login")) {
             return true;
         }
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);

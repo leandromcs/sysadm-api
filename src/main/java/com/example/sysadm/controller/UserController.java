@@ -1,10 +1,12 @@
 package com.example.sysadm.controller;
 
+import com.example.sysadm.dto.OperadorDTO;
 import com.example.sysadm.model.Operador;
 import com.example.sysadm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<String> cadastrarOperador(@RequestBody Operador operador) {
+    public ResponseEntity<String> cadastrarOperador(@Validated @RequestBody Operador operador) {
         Operador operadorCadastrado = service.cadastrarOperador(operador);
         if (operadorCadastrado != null) {
             return new ResponseEntity<>("Operador cadastrado com sucesso!", HttpStatus.OK);
@@ -30,11 +32,8 @@ public class UserController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<Operador>> listarOperadores() {
-        List<Operador> operadores = service.listarOperadores();
-        if (operadores.size() != 0) {
-            return new ResponseEntity<>(operadores, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(operadores, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<List<OperadorDTO>> listarOperadores() {
+        List<OperadorDTO> operadores = service.listarOperadores();
+        return new ResponseEntity<>(operadores, HttpStatus.OK);
     }
 }
