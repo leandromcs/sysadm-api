@@ -60,4 +60,26 @@ public class UserService {
     public Operador buscarOperadorPorLogin(String login) {
         return repository.findByLogin(login);
     }
+
+    public Operador editarOperador(Operador operador) {
+        if (AuthenticationData.getLoggedUser().getPerfil().toString().equals("ADMINISTRADOR")) {
+            Operador operadorBuscado = repository.findByLogin(operador.getLogin());
+            operadorBuscado.setNome(operador.getNome());
+            operadorBuscado.setPerfil(operador.getPerfil());
+
+            if (operador.getSenha() != null) {
+                operadorBuscado.setSenha(operador.getSenha());
+            }
+
+            return repository.save(operadorBuscado);
+        }
+        return null;
+    }
+
+    public void excluirOperador(String login) {
+        if (AuthenticationData.getLoggedUser().getPerfil().toString().equals("ADMINISTRADOR")) {
+            Operador operadorToDelete = repository.findByLogin(login);
+            repository.delete(operadorToDelete);
+        }
+    }
 }

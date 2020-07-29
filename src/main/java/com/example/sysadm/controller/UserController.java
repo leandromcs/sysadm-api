@@ -36,4 +36,19 @@ public class UserController {
         List<OperadorDTO> operadores = service.listarOperadores();
         return new ResponseEntity<>(operadores, HttpStatus.OK);
     }
+
+    @PutMapping("/editar")
+    public ResponseEntity<String> editarOperador(@RequestBody Operador operador) {
+        Operador operadorCadastrado = service.editarOperador(operador);
+        if (operadorCadastrado != null) {
+            return new ResponseEntity<>("Operador editado com sucesso!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Operador não editado.", HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/deletar")
+    public ResponseEntity<String> deletarOperador(@RequestParam String login) {
+        service.excluirOperador(login);
+        return new ResponseEntity<>("Operador deletado com sucesso!", HttpStatus.OK);
+    }
 }
